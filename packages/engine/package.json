@@ -2,9 +2,9 @@
   "name": "@easy-peasy/engine",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Alan S. Ferreira",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT License",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc --build",
@@ -23,7 +23,6 @@
     "handlebars": "4.7.7"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",

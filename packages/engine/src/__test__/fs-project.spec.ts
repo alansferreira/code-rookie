@@ -21,6 +21,18 @@ describe('Workspace tests', () => {
   //   expect(wrk.name).toEqual('{{teste}}')
   //   expect(wrk.type).toEqual('FOLDER')
   // })
+  beforeAll(async () => {
+    if (existsSync(outputFolder)) {
+      rmdirSync(outputFolder, { recursive: true })
+    }
+    mkdirSync(outputFolder, { recursive: true })
+  })
+
+  afterAll( async () => {
+    if (existsSync(outputFolder)) {
+      rmdirSync(outputFolder, { recursive: true })
+    }
+  })
   test('ReadTree', () => {
     expect(wrk.itens.length).toBeGreaterThan(9)
     for (const item of wrk.itens) {
@@ -30,10 +42,6 @@ describe('Workspace tests', () => {
   })
 
   test('folder templating', async () => {
-    if (existsSync(outputFolder)) {
-      rmdirSync(outputFolder, { recursive: true })
-    }
-    mkdirSync(outputFolder, { recursive: true })
 
     await wrk.render(
       { data: { teste: 'hello', 'some-teste': 'annoter some hello' } },
