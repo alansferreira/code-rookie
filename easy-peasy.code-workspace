@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "✨ easy-peasy",
+			"path": "."
+		},
+		{
+			"name": "🚀 @easy-peasy/api",
+			"path": "packages/api"
+		},
+		{
+			"name": "📦 @easy-peasy/app",
+			"path": "packages/app"
+		},
+		{
+			"name": "📦 @easy-peasy/cli",
+			"path": "packages/cli"
+		},
+		{
+			"name": "📦 @easy-peasy/engine",
+			"path": "packages/engine"
+		}
+	],
+	"settings": {}
+}
