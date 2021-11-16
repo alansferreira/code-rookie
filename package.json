@@ -1,0 +1,15 @@
+{
+  "name": "easy-peasy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    
+  },
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ]
+}
