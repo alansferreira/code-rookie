@@ -48,7 +48,6 @@ export class FSWorkspace {
     for (const fsitem of itens) {
       const { type } = fsitem
       if (type !== 'FILE') continue
-      expect(type).toEqual('FILE')
 
       const r = await fsitem.render(context, processor)
 

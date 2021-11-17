@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { version } from '../package.json'
+// import { version } from '../package.json'
 import { FSWorkspace } from '@easy-peasy/engine/fs-project'
 import { HandlebarsProcessor } from '@easy-peasy/engine/plugins/processors/handlebars.processor'
 
@@ -36,5 +36,5 @@ program
 //     console.log(output)
 //   })
 console.log(process.argv)
-program.version(version)
+// program.version(version)
 program.parse(process.argv)

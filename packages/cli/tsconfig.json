@@ -2,8 +2,44 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    // "esModuleInterop": false,
+    "allowUmdGlobalAccess": true,
+    "target": "ES2017",
+    "plugins": [{
+      "transform": "@zerollup/ts-transform-paths", "exclude": ["*"]
+    }],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "pretty": true,
+    "sourceMap": true,
+    // "target": "es6",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    
+    "lib": ["es2020", "dom"],
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "types": [
+      "node", "jest"
+    ],
+    // "target": "es5",
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   },
-  "include": ["src/**/*"],
+
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

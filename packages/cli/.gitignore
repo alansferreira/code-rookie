@@ -1,6 +1,7 @@
 # compiled output
 **/__test__/output
 
+/releases
 /dist
 /node_modules
 # env files
