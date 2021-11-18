@@ -8,9 +8,6 @@
     // "esModuleInterop": false,
     "allowUmdGlobalAccess": true,
     "target": "ES2017",
-    "plugins": [{
-      "transform": "@zerollup/ts-transform-paths", "exclude": ["*"]
-    }],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "CommonJS",

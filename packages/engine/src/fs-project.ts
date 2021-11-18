@@ -8,7 +8,6 @@ import {
   writeFileSync
 } from 'fs'
 import { basename, join } from 'path'
-import { dirname } from 'path/posix'
 import {
   Context,
   InputTemplateItem,
