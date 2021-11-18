@@ -10,8 +10,9 @@ app.use(bodyParser.json())
 app.use(
   '/docs',
   swaggerUi.serve,
-  async (_req: express.Request, res: express.Response) =>
+  async (_req: express.Request, res: express.Response) => {
     res.send(swaggerUi.generateHTML(await import('../swagger.json')))
+  }
 )
 
 RegisterRoutes(app)
