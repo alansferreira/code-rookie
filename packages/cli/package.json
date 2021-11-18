@@ -1,5 +1,5 @@
 {
-  "name": "@easy-peasy/easy-peasy-cli",
+  "name": "@easy-peasy/cli",
   "version": "0.0.1",
   "description": "",
   "bin": "dist/cli/src/main.js",
@@ -14,23 +14,24 @@
     
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+
+      "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json"
   },
   "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
     "commander": "^8.3.0",
     "handlebars": "4.7.7",
     "pkg": "^5.4.1",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
     "terminal-kit": "^2.1.8"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.0.0",
+    "@types/node": "^14.14.22",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
