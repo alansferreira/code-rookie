@@ -1,37 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
+    "baseUrl": ".",
     "outDir": "dist",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    // "esModuleInterop": false,
-    "allowUmdGlobalAccess": true,
-    "target": "ES2017",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "pretty": true,
-    "sourceMap": true,
-    // "target": "es6",
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    
-    "lib": ["es2020", "dom"],
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "types": [
-      "node", "jest"
-    ],
-    // "target": "es5",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
-    ]
+    "esModuleInterop": false,
+    "paths": {
+      "@easy-peasy/core/*": [
+        "../libs/core/src/*",
+      ]
+    },
   },
 
   "include": [

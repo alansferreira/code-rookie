@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 // import { version } from '../package.json'
-import { FSWorkspace } from '@easy-peasy/engine/fs-project'
-import { HandlebarsProcessor } from '@easy-peasy/engine/plugins/processors/handlebars.processor'
+import { FSWorkspace } from '@easy-peasy/core/fs-project'
+import { HandlebarsProcessor } from '@easy-peasy/core/plugins/processors/handlebars.processor'
 
 interface IRenderOptions {
   input?: string

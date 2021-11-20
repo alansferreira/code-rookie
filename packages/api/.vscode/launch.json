@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "Debug",
-      "command": "yarn dev",
+      "command": "yarn start:dev",
       "request": "launch",
       "type": "node-terminal",
       "env": {

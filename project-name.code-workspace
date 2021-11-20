@@ -17,8 +17,8 @@
 			"path": "packages/cli"
 		},
 		{
-			"name": "📦 @easy-peasy/engine",
-			"path": "packages/engine"
+			"name": "📦 @easy-peasy/core",
+			"path": "packages/libs/core"
 		}
 	],
 	"settings": {}

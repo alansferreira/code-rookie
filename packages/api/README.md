@@ -1,73 +1,44 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Monorepo API Restfull `@easy-peasy/api`
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+| References | Description |
+| -----------|----- |
+| [tsoa](https://tsoa-community.github.io/docs/getting-started.html) | Restful Framework and Swagger generator |
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Project stricture 
 
-## Description
+* 📁 [.vscode/](./api/.vscode)
+  * 📃 [launch.json](./api/.vscode/launch.json)
+* 📁 [docs/](./api/docs)
+  * 📃 [vscode-debug.png](./api/docs/vscode-debug.png)
+* 📁 [src/](./api/src)
+  * 📁 [.config/](./api/src/.config)
+    * 📃 [routes.ts](./api/src/.config/routes.ts)
+  * 📁 [health/](./api/src/health)
+    * 📃 [health.controller.ts](./api/src/health/health.controller.ts)
+    * 📃 [interfaces.ts](./api/src/health/interfaces.ts)
+  * 📁 [hello/](./api/src/hello)
+    * 📃 [hello.controller.ts](./api/src/hello/hello.controller.ts)
+    * 📃 [interfaces.ts](./api/src/hello/interfaces.ts)
+  * 📁 [user/](./api/src/user)
+    * 📃 [interfaces.ts](./api/src/user/interfaces.ts)
+    * 📃 [user.controller.ts](./api/src/user/user.controller.ts)
+    * 📃 [user.service.ts](./api/src/user/user.service.ts)
+  * 📃 [app.ts](./api/src/app.ts)
+  * 📃 [server.ts](./api/src/server.ts)
+* 📃 [.eslintrc.js](./api/.eslintrc.js)
+* 📃 [.gitignore](./api/.gitignore)
+* 📃 [.prettierrc](./api/.prettierrc)
+* 📃 [README.md](./api/README.md)
+* 📃 [jest.config.js](./api/jest.config.js)
+* 📃 [nodemon.json](./api/nodemon.json)
+* 📃 [package-lock.json](./api/package-lock.json)
+* 📃 [package.json](./api/package.json)
+* 📃 [swagger.json](./api/swagger.json)
+* 📃 [tsconfig.json](./api/tsconfig.json)
+* 📃 [tsoa.json](./api/tsoa.json)
+* 📃 [yarn-error.log](./api/yarn-error.log)
+* 📃 [yarn.lock](./api/yarn.lock)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Debbuging with VSCode
+![](docs/vscode-debug.png)

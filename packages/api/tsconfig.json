@@ -1,9 +1,19 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "outDir": "dist"
+    "baseUrl": ".",
+    "outDir": "dist",
+
+    "paths": {
+      "@easy-peasy/core/*": [
+        "../libs/core/src/*",
+      ]
+    },
   },
-  "include": ["src/**/*", "src/.config"],
+
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  easy-peasy.cli-alpine:
+    build:
+      context: .
+      dockerfile: dockerfile.cli-alpine-test
+  easy-peasy.cli-debian:
+    build:
+      context: .
+      dockerfile: dockerfile.cli-debian-test
+  easy-peasy.api:
+    build:
+      context: .
+      dockerfile: dockerfile.api
+    ports:
+      - "3000:3000"
+    

@@ -1,5 +1,5 @@
 {
-  "watch": ["src", "../engine/src"],
+  "watch": ["src", "../libs/core/src"],
   "ext": "ts,json",
   "ignore": ["**/*.spec.js"],
   "exec": "yarn nodemon:exec",
