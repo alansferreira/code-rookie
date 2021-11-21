@@ -1,0 +1,4 @@
+[submodule "templates/typescript-monorepo"]
+	path = templates/typescript-monorepo
+	url = git@github.com:alellpro/typescript-monorepo.git
+	branch = master
