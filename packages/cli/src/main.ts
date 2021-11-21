@@ -21,10 +21,18 @@ const renderCommand = (options: IRenderOptions) => {
 const program = new Command()
 program
   .command('render')
-  .option('-i, --input', 'Input template folder', './template')
-  .option('-o, --output', 'Output processed folder', './output')
-  .option('-p, --processor', 'Template processor name', 'handlebars')
-  .option('-d, --data-file', 'JSON data file to apply template', './data.json')
+  .option('-i, --input <input>', 'Input template folder', './template')
+  .option('-o, --output <output>', 'Output processed folder', './output')
+  .option(
+    '-p, --processor <processorName>',
+    'Template processor name',
+    'handlebars'
+  )
+  .option(
+    '-d, --data-file <dataFile>',
+    'JSON data file to apply template',
+    './data.json'
+  )
 
   .action(renderCommand)
 

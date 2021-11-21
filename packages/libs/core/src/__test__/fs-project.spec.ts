@@ -1,11 +1,40 @@
-import { existsSync, mkdirSync, readdirSync, rmdirSync } from 'fs'
-import path, { join } from 'path'
-import { FSTemplateItem, FSWorkspace } from '../fs-project'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync } from 'fs'
+import minimatch from 'minimatch'
+import { join } from 'path'
+import { FSTemplateItem, FSWorkspace, isMatchGlob } from '../fs-project'
 import { HandlebarsProcessor } from '../plugins/processors/handlebars.processor'
 
-const workspaceFolder = join(__dirname, 'workspace')
-const outputFolder = join(__dirname, 'output')
-const wrk = new FSWorkspace(workspaceFolder, outputFolder)
+const templatesFolder =
+  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/easy-peasy/templates'
+const workspaceFolder = join(templatesFolder, 'ts-monorepo')
+const outputFolder = join(templatesFolder, 'ts-monorepo-generated')
+const dataFile = join(templatesFolder, 'ts-monorepo-data.json')
+
+describe('Utility functions', () => {
+  test('isMatchGlob', () => {
+    expect(
+      isMatchGlob('project/node_modules', ['**/node_modules'])
+    ).toBeTruthy()
+
+    expect(
+      isMatchGlob('project/node_modules/', ['**/node_modules'])
+    ).toBeTruthy()
+
+    expect(isMatchGlob('./node_modules', ['**/node_modules'])).toBeFalsy()
+
+    expect(
+      isMatchGlob('project/package/.git', ['**/node_modules', '**/.git'])
+    ).toBeTruthy()
+
+    expect(
+      isMatchGlob('project/package/assets/image.jpg', [
+        '**/node_modules',
+        '**/.git',
+        '**/*.jpg'
+      ])
+    ).toBeTruthy()
+  })
+})
 
 describe('FileTemplateItem tests', () => {
   test('Constructor', () => {
@@ -21,6 +50,7 @@ describe('Workspace tests', () => {
   //   expect(wrk.name).toEqual('{{teste}}')
   //   expect(wrk.type).toEqual('FOLDER')
   // })
+
   beforeAll(async () => {
     if (existsSync(outputFolder)) {
       rmdirSync(outputFolder, { recursive: true })
@@ -28,12 +58,14 @@ describe('Workspace tests', () => {
     mkdirSync(outputFolder, { recursive: true })
   })
 
-  afterAll( async () => {
+  afterAll(async () => {
     if (existsSync(outputFolder)) {
       rmdirSync(outputFolder, { recursive: true })
     }
   })
-  test('ReadTree', () => {
+  test('Constructor', () => {
+    const wrk = new FSWorkspace(workspaceFolder, outputFolder)
+
     expect(wrk.itens.length).toBeGreaterThan(9)
     for (const item of wrk.itens) {
       expect(item.name).toBeTruthy()
@@ -42,11 +74,11 @@ describe('Workspace tests', () => {
   })
 
   test('folder templating', async () => {
+    const wrk = new FSWorkspace(workspaceFolder, outputFolder)
+    const templateData = JSON.parse(readFileSync(dataFile).toString())
 
-    await wrk.render(
-      { data: { teste: 'hello', 'some-teste': 'annoter some hello' } },
-      new HandlebarsProcessor()
-    )
+    await wrk.render(templateData, new HandlebarsProcessor())
+
     expect(readdirSync(wrk.outputFolder)).toHaveProperty('length')
   })
 })

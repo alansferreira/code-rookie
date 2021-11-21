@@ -14,15 +14,56 @@ import {
   OutputTemplateItem,
   Processor
 } from './interfaces'
+import minimatch from 'minimatch'
+
+export interface WorkspaceConfig {
+  dataSchema?: string
+  justCopy?: string[]
+  ignore?: string[]
+}
+
+export interface WorkspaceOptions {
+  awaysReloadConfig?: boolean
+  configPath?: string
+}
 
 export class FSWorkspace {
   itens: FSTemplateItem[] = []
-  constructor(public inputFolder: string, public outputFolder: string) {
+  _config: WorkspaceConfig
+
+  constructor(
+    public inputFolder: string,
+    public outputFolder: string,
+    public options?: WorkspaceOptions
+  ) {
     for (const entity of readdirSync(inputFolder)) {
-      const el = new FSTemplateItem(join(inputFolder, entity))
+      const fullpath = join(inputFolder, entity)
+      if (isMatchGlob(fullpath, this.config?.ignore || [])) {
+        continue
+      }
+
+      const el = new FSTemplateItem(fullpath, this)
       this.itens.push(el)
-      this.itens.push(...this.readtree(el))
+      for (const subitem of this.readtree(el)) {
+        this.itens.push(subitem)
+      }
     }
+  }
+  get configPath() {
+    return join(this.inputFolder, '.template', 'config.json')
+  }
+
+  get config(): WorkspaceConfig {
+    if (this._config && !this?.options?.awaysReloadConfig) return this._config
+
+    if (existsSync(this.configPath)) {
+      this._config = JSON.parse(readFileSync(this.configPath).toString())
+    } else {
+      this._config = null
+      console.warn(`Config file '${this.configPath}' not founded!`)
+    }
+
+    return this._config
   }
 
   readtree(fsitem: FSTemplateItem): FSTemplateItem[] {
@@ -69,17 +110,20 @@ export class FSTemplateItem
   type?: 'FOLDER' | 'FILE'
   input: Buffer
 
-  parent?: FSTemplateItem
   children: FSTemplateItem[] = []
 
-  constructor(public name: string, parent?: FSTemplateItem) {
+  constructor(
+    public name: string,
+    public workspace?: FSWorkspace,
+    public parent?: FSTemplateItem
+  ) {
     this.type = statSync(this.name).isDirectory() ? 'FOLDER' : 'FILE'
   }
   *[Symbol.iterator](): Iterator<FSTemplateItem, any, undefined> {
     if (this.type === 'FILE') return
 
     for (const entity of readdirSync(this.name)) {
-      yield new FSTemplateItem(join(this.name, entity), this)
+      yield new FSTemplateItem(join(this.name, entity), this.workspace, this)
     }
   }
 
@@ -97,16 +141,68 @@ export class FSTemplateItem
       // input: this
       return null
     }
+    const inputContent = readFileSync(this.name)
+    let outputContent = inputContent
 
-    const destContent = await processor.render(context, {
-      ...this,
-      input: readFileSync(this.name)
-    })
+    if (!isMatchGlob(this.name, this.workspace?.config?.justCopy || [])) {
+      try {
+        const rendered = await processor.render(context, {
+          ...this,
+          input: readFileSync(this.name)
+        })
+        outputContent = rendered.output
+      } catch (error) {
+        throw new Error(
+          `The file template '${this.name}' can not processed by '${processor.name}' processor, check sintax on file or review your 'justCopy' at '${this.workspace?.configPath}'!`
+        )
+      }
+    }
 
     return {
       name: destName.output.toString(),
-      output: destContent.output,
+      output: outputContent,
       input: this
     }
   }
+}
+export const isMatch = (
+  target: string,
+  pattern: string,
+  options?: minimatch.IOptions
+) => {
+  // if (target.startsWith(pattern) || target.endsWith(pattern)) return true
+  return minimatch(target, pattern, options)
+}
+
+/**
+ * Check if path match in any patterns
+ * @param target full path for compare to patterns
+ * @param pattern patters to check if match
+ * @returns list of patters that matches
+ */
+export const matchGlob = (
+  target: string,
+  pattern: string | string[]
+): string[] => {
+  const patterns = Array.isArray(pattern) ? pattern : [pattern]
+
+  return patterns.filter((p) => isMatch(target, p, { dot: true }))
+}
+/**
+ * Check if path match in any patterns
+ * @param target full path for compare to patterns
+ * @param pattern patters to check if match
+ * @returns list of patters that matches
+ */
+export const isMatchGlob = (
+  target: string,
+  pattern: string | string[]
+): boolean => {
+  const patterns = Array.isArray(pattern) ? pattern : [pattern]
+
+  const founded = patterns.find((p) =>
+    isMatch(target, p, { dot: true, matchBase: true })
+  )
+
+  return !!founded
 }
