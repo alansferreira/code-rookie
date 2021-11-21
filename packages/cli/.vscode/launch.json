@@ -1,13 +1,15 @@
 {
   "configurations": [
     {
-      "name": "Debug [hello]",
+      "name": "Debug [render]",
       "request": "launch",
       "runtimeExecutable": "yarn",
       "runtimeArgs": [
         "start:dev",
-        // "hello", "Joseph"
-        "hello", "-p", "Good morning", "Joseph"
+        "render", 
+        "-i", "./template", 
+        "-o", "./output",
+        "-d", ".data.json"
       ],
       "skipFiles": [
         "<node_internals>/**"

@@ -10,6 +10,14 @@ interface IRenderOptions {
   dataFile?: string
 }
 
+const renderCommand = (options: IRenderOptions) => {
+  const { input, output, dataFile } = options
+
+  const wrk = new FSWorkspace(input, output)
+
+  wrk.render({ data: dataFile }, new HandlebarsProcessor())
+  // console.log(options)
+}
 const program = new Command()
 program
   .command('render')
@@ -18,14 +26,7 @@ program
   .option('-p, --processor', 'Template processor name', 'handlebars')
   .option('-d, --data-file', 'JSON data file to apply template', './data.json')
 
-  .action((options: IRenderOptions) => {
-    const { input, output, dataFile } = options
-
-    const wrk = new FSWorkspace(input, output)
-
-    wrk.render({ data: dataFile }, new HandlebarsProcessor())
-    // console.log(options)
-  })
+  .action(renderCommand)
 
 // program
 //   .command('processor [processor]')
@@ -35,6 +36,7 @@ program
 //     console.log(input)
 //     console.log(output)
 //   })
-console.log(process.argv)
+
+// console.log(process.argv)
 // program.version(version)
 program.parse(process.argv)
