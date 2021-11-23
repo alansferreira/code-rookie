@@ -7,38 +7,76 @@ import {
   statSync,
   writeFileSync
 } from 'fs'
-import { basename, join } from 'path'
+import { basename, join, resolve } from 'path'
 import {
   Context,
   InputTemplateItem,
   OutputTemplateItem,
-  Processor
+  Processor,
+  TemplateConfig,
+  TemplateHooks,
+  TemplateOptions,
+  Workspace
 } from './interfaces'
 import minimatch from 'minimatch'
 
-export interface WorkspaceConfig {
-  dataSchema?: string
-  justCopy?: string[]
-  ignore?: string[]
-}
-
-export interface WorkspaceOptions {
-  awaysReloadConfig?: boolean
-  configPath?: string
-}
-
-export class FSWorkspace {
+export class FSWorkspace implements Workspace<FSTemplateItem> {
   itens: FSTemplateItem[] = []
-  _config: WorkspaceConfig
+  templateSpec: TemplateOptions<FSTemplateItem, Workspace<FSTemplateItem>>
 
   constructor(
     public inputFolder: string,
     public outputFolder: string,
-    public options?: WorkspaceOptions
+    public configPath: string = '.template'
   ) {
+    this.loadConfig()
+    this.loadItens()
+  }
+  get templateSpecPath() {
+    if (existsSync(this.configPath)) return resolve(this.configPath)
+    return resolve(this.inputFolder, this.configPath)
+  }
+
+  async loadConfig(): Promise<void> {
+    const { templateSpecPath } = this
+    const configJson = join(templateSpecPath, 'config.json')
+    const dataSchemaJson = join(templateSpecPath, 'data-schema.json')
+
+    let dataSchema = undefined
+    let config: TemplateConfig = {}
+    const hooks: TemplateHooks<FSTemplateItem, FSWorkspace> = {}
+
+    if (existsSync(configJson)) {
+      config = JSON.parse(readFileSync(configJson).toString())
+    } else {
+      console.warn(`Config file '${configJson}' not founded!`)
+    }
+
+    if (existsSync(dataSchemaJson)) {
+      dataSchema = JSON.parse(readFileSync(dataSchemaJson).toString())
+    } else {
+      console.warn(`Data Schema file '${dataSchemaJson}' not founded!`)
+    }
+
+    hooks.preProcess = require(join(templateSpecPath, 'preProcess'))
+    hooks.beforeAll = require(join(templateSpecPath, 'beforeAll'))
+    hooks.beforeEach = require(join(templateSpecPath, 'beforeEach'))
+    hooks.afterEach = require(join(templateSpecPath, 'afterEach'))
+    hooks.afterAll = require(join(templateSpecPath, 'afterAll'))
+    hooks.postProcess = require(join(templateSpecPath, 'postProcess'))
+
+    this.templateSpec = {
+      path: templateSpecPath,
+      config,
+      dataSchema,
+      hooks
+    }
+  }
+  async loadItens() {
+    const { inputFolder, templateSpec } = this
     for (const entity of readdirSync(inputFolder)) {
       const fullpath = join(inputFolder, entity)
-      if (isMatchGlob(fullpath, this.config?.ignore || [])) {
+      if (isMatchGlob(fullpath, templateSpec?.config?.ignore || [])) {
         continue
       }
 
@@ -49,23 +87,6 @@ export class FSWorkspace {
       }
     }
   }
-  get configPath() {
-    return join(this.inputFolder, '.template', 'config.json')
-  }
-
-  get config(): WorkspaceConfig {
-    if (this._config && !this?.options?.awaysReloadConfig) return this._config
-
-    if (existsSync(this.configPath)) {
-      this._config = JSON.parse(readFileSync(this.configPath).toString())
-    } else {
-      this._config = null
-      console.warn(`Config file '${this.configPath}' not founded!`)
-    }
-
-    return this._config
-  }
-
   readtree(fsitem: FSTemplateItem): FSTemplateItem[] {
     const result = []
     for (const el of fsitem) {
@@ -78,7 +99,18 @@ export class FSWorkspace {
   }
 
   async render(context: Context, processor: Processor) {
-    const { inputFolder, outputFolder, itens } = this
+    const { inputFolder, outputFolder, itens, templateSpec } = this
+    const {
+      preProcess,
+      beforeAll,
+      beforeEach,
+      afterEach,
+      afterAll,
+      postProcess
+    } = templateSpec?.hooks || {}
+
+    if (preProcess) await preProcess(this)
+    if (beforeAll) await beforeAll(this)
 
     if (existsSync(outputFolder)) {
       rmdirSync(outputFolder, { recursive: true })
@@ -88,6 +120,8 @@ export class FSWorkspace {
     for (const fsitem of itens) {
       const { type } = fsitem
       if (type !== 'FILE') continue
+
+      if (beforeEach) await beforeEach(fsitem, this)
 
       const r = await fsitem.render(context, processor)
 
@@ -100,7 +134,12 @@ export class FSWorkspace {
       )
       mkdirSync(join(outputFolder, dirPath), { recursive: true })
       writeFileSync(join(outputFolder, relativePath), r.output)
+
+      if (afterEach) await afterEach(fsitem, r, this)
     }
+
+    if (afterAll) await afterAll(this)
+    if (postProcess) await postProcess(this)
   }
 }
 
@@ -131,6 +170,10 @@ export class FSTemplateItem
     context: Context,
     processor: Processor
   ): Promise<OutputTemplateItem> {
+    const { templateSpec } = this.workspace
+    const { config } = templateSpec || {}
+    const { justCopy } = config || {}
+
     const destName = await processor.render(context, {
       input: Buffer.from(this.name)
     })
@@ -144,7 +187,7 @@ export class FSTemplateItem
     const inputContent = readFileSync(this.name)
     let outputContent = inputContent
 
-    if (!isMatchGlob(this.name, this.workspace?.config?.justCopy || [])) {
+    if (!isMatchGlob(this.name, justCopy || [])) {
       try {
         const rendered = await processor.render(context, {
           ...this,
@@ -153,7 +196,7 @@ export class FSTemplateItem
         outputContent = rendered.output
       } catch (error) {
         throw new Error(
-          `The file template '${this.name}' can not processed by '${processor.name}' processor, check sintax on file or review your 'justCopy' at '${this.workspace?.configPath}'!`
+          `The file template '${this.name}' can not processed by '${processor.name}' processor, check sintax on file or review your 'justCopy' at '${templateSpec.path}'!`
         )
       }
     }
