@@ -1,32 +1,22 @@
-# Typescript monorepo boilerplate
+# easy-peasy project 
 
-Project sample to monorepo typescript project.
+Extensible templating processor for boilerplate projects and components
 
+## Motivation
 
-* References
-  * Yarn workspaces
-  * Typescript
+After several fractions of project templates that don't offer extensibility beyond an "inspectable" environment, like a debugging environment, I decided to create a processor with these features.
 
+## Features expected
 
-## Projects types
-
-* CLI with `pkg`
-* Restfull API with `tsoa(swagger)` 
-* Shared libs with `typescript-ioc`
-* `typescript-transform-paths`
-* 
-
-### CLI with `pkg`
+- [x] Inspectable environment ( Integration of @easy-peasy/core + vscode + nodejs)
+- [x] Extends processors while fetch template files (preProcess, beforeAll, beforeEach, afterEach, afterAll, prosProcess)
+- [x] Reduce memory usage while processing files (yield)
+- [x] Integrate with git repositories, thank's very mutch [nodegit maintainers](https://github.com/nodegit)
+- [ ] Web interface integrated with Database to catalog many things
+- [ ] CLI interface to use anywere
 
 
-## Docker
-The `docker files` on this project use `monorepo root directory` as `docker context path`.
-> Do not run docker commands in sub-folders bellow, aways on this.
+## Usage
 
-### Building API Project
+See `spec.ts` and `.vscode/launch.json` files to run/debug and examples of use.
 
-The `dockerfile.api` run with [docker build stages](https://docs.docker.com/develop/develop-images/multistage-build/#name-your-build-stages)
-
-```sh
-docker build -t project_name.api -f dockerfile.api .
-```
