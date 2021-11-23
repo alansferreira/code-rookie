@@ -28,10 +28,7 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
     public inputFolder: string,
     public outputFolder: string,
     public configPath: string = '.template'
-  ) {
-    this.loadConfig()
-    this.loadItens()
-  }
+  ) {}
   get templateSpecPath() {
     if (existsSync(this.configPath)) return resolve(this.configPath)
     return resolve(this.inputFolder, this.configPath)
@@ -99,6 +96,9 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
   }
 
   async render(context: Context, processor: Processor) {
+    this.loadConfig()
+    this.loadItens()
+
     const { inputFolder, outputFolder, itens, templateSpec } = this
     const {
       preProcess,

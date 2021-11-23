@@ -9,10 +9,8 @@
     "prebuild": "rimraf dist",
     "build": "ttsc --build",
     "start:dev": "ts-node --compiler ttypescript src/main.ts",
-    
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -20,9 +18,11 @@
     "test:e2e": "jest --config ./jest-e2e.json"
   },
   "dependencies": {
-    "minimatch": "3.0.4"
+    "minimatch": "3.0.4",
+    "nodegit": "^0.27.0"
   },
   "devDependencies": {
-    "@types/minimatch": "3.0.5"
+    "@types/minimatch": "3.0.5",
+    "@types/nodegit": "^0.27.6"
   }
 }

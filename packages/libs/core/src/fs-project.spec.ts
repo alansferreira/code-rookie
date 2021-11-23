@@ -1,8 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync } from 'fs'
-import minimatch from 'minimatch'
 import { join } from 'path'
-import { FSTemplateItem, FSWorkspace, isMatchGlob } from '../fs-project'
-import { HandlebarsProcessor } from '../plugins/processors/handlebars.processor'
+import { FSTemplateItem, FSWorkspace, isMatchGlob } from './fs-project'
+import { HandlebarsProcessor } from './plugins/processors/handlebars.processor'
 
 const templatesFolder =
   '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/easy-peasy/templates'
@@ -79,6 +78,6 @@ describe('Workspace tests', () => {
 
     await wrk.render(templateData, new HandlebarsProcessor())
 
-    expect(readdirSync(wrk.outputFolder)).toHaveProperty('length')
+    expect(readdirSync(wrk.outputFolder).length).toBeGreaterThan(0)
   })
 })
