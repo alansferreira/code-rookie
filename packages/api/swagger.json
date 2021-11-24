@@ -83,7 +83,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "@easy-peasy/api",
+		"title": "@code-rookie/api",
 		"version": "0.0.1",
 		"license": {
 			"name": "MIT License"

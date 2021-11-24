@@ -4,7 +4,7 @@ import { join } from 'path'
 import { GitWorkspace } from './git-project'
 
 const templatesFolder =
-  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/easy-peasy/templates/git-tests'
+  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/git-tests'
 const workspaceFolder = join(templatesFolder, 'ts-monorepo')
 const outputFolder = join(templatesFolder, 'ts-monorepo-generated')
 const dataFile = join(templatesFolder, 'ts-monorepo-data.json')

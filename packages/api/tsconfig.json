@@ -5,7 +5,7 @@
     "outDir": "dist",
 
     "paths": {
-      "@easy-peasy/core/*": [
+      "@code-rookie/core/*": [
         "../libs/core/src/*",
       ]
     },

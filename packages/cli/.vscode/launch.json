@@ -7,9 +7,9 @@
       "runtimeArgs": [
         "start:dev",
         "render", 
-        "-i", "./template", 
-        "-o", "./output",
-        "-d", ".data.json"
+        "-i", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo", 
+        "-o", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-generated",
+        "-d", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-data.json"
       ],
       "skipFiles": [
         "<node_internals>/**"

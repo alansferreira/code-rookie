@@ -14,11 +14,11 @@ Platform:
   linux x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, copyfile '/home/alf/.cache/yarn/v6/npm-ts-node-10.4.0-680f88945885f4e6cf450e7f0d6223dd404895f7-integrity/node_modules/ts-node/dist/transpilers/swc.d.ts' -> '/media/alf/usr-data/dev/repo/dev.azure.com/DEVOPS-RCHLO/cell-cac/easy-peasy/packages/engine/node_modules/ts-node/dist/transpilers/swc.d.ts'
+  Error: ENOENT: no such file or directory, copyfile '/home/alf/.cache/yarn/v6/npm-ts-node-10.4.0-680f88945885f4e6cf450e7f0d6223dd404895f7-integrity/node_modules/ts-node/dist/transpilers/swc.d.ts' -> '/media/alf/usr-data/dev/repo/dev.azure.com/DEVOPS-RCHLO/cell-cac/code-rookie/packages/engine/node_modules/ts-node/dist/transpilers/swc.d.ts'
 
 npm manifest: 
   {
-    "name": "easy-peasy",
+    "name": "code-rookie",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",

@@ -1,4 +1,4 @@
-# Monorepo API Restfull `@easy-peasy/api`
+# Monorepo API Restfull `@code-rookie/api`
 
 | References | Description |
 | -----------|----- |

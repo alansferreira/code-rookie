@@ -4,7 +4,7 @@ import { FSTemplateItem, FSWorkspace, isMatchGlob } from './fs-project'
 import { HandlebarsProcessor } from './plugins/processors/handlebars.processor'
 
 const templatesFolder =
-  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/easy-peasy/templates'
+  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates'
 const workspaceFolder = join(templatesFolder, 'ts-monorepo')
 const outputFolder = join(templatesFolder, 'ts-monorepo-generated')
 const dataFile = join(templatesFolder, 'ts-monorepo-data.json')

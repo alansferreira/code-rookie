@@ -1,23 +1,23 @@
 {
 	"folders": [
 		{
-			"name": "✨ easy-peasy",
+			"name": "✨ code-rookie",
 			"path": "."
 		},
 		{
-			"name": "🚀 @easy-peasy/api",
+			"name": "🚀 @code-rookie/api",
 			"path": "packages/api"
 		},
 		{
-			"name": "📦 @easy-peasy/app",
+			"name": "📦 @code-rookie/app",
 			"path": "packages/app"
 		},
 		{
-			"name": "📦 @easy-peasy/cli",
+			"name": "📦 @code-rookie/cli",
 			"path": "packages/cli"
 		},
 		{
-			"name": "📦 @easy-peasy/core",
+			"name": "📦 @code-rookie/core",
 			"path": "packages/libs/core"
 		}
 	],

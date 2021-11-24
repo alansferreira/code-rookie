@@ -8,7 +8,7 @@ import {
   Route,
   SuccessResponse
 } from 'tsoa'
-import { ServiceOne } from '@easy-peasy/core/services/service-one'
+import { ServiceOne } from '@code-rookie/core/services/service-one'
 import { Inject } from 'typescript-ioc'
 
 @Route('/hello')

@@ -1,15 +1,15 @@
 version: '3'
 
 services:
-  easy-peasy.cli-alpine:
+  code-rookie.cli-alpine:
     build:
       context: .
       dockerfile: dockerfile.cli-alpine-test
-  easy-peasy.cli-debian:
+  code-rookie.cli-debian:
     build:
       context: .
       dockerfile: dockerfile.cli-debian-test
-  easy-peasy.api:
+  code-rookie.api:
     build:
       context: .
       dockerfile: dockerfile.api

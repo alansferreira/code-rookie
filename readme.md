@@ -1,4 +1,4 @@
-# easy-peasy project 
+# code-rookie project 
 
 Extensible templating processor for boilerplate projects and components
 
@@ -8,7 +8,7 @@ After several fractions of project templates that don't offer extensibility beyo
 
 ## Features expected
 
-- [x] Inspectable environment ( Integration of @easy-peasy/core + vscode + nodejs)
+- [x] Inspectable environment ( Integration of @code-rookie/core + vscode + nodejs)
 - [x] Extends processors while fetch template files (preProcess, beforeAll, beforeEach, afterEach, afterAll, prosProcess)
 - [x] Reduce memory usage while processing files (yield)
 - [x] Integrate with git repositories, thank's very mutch [nodegit maintainers](https://github.com/nodegit)
