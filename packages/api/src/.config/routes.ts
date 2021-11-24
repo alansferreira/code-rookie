@@ -5,7 +5,7 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, H
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { HealthController } from './../health/health.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { HelloController } from './../hello/hello.controller';
+import { HelloController } from './../render/render.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UsersController } from './../user/user.controller';
 import * as express from 'express';
@@ -18,6 +18,16 @@ const models: TsoaRoute.Models = {
         "properties": {
             "name": {"dataType":"string"},
             "version": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PostBody": {
+        "dataType": "refObject",
+        "properties": {
+            "source": {"dataType":"string","required":true},
+            "sourceType": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["GIT"]},{"dataType":"enum","enums":["LOCAL"]}],"required":true},
+            "template": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"dataType":"any","required":true}},"required":true},
         },
         "additionalProperties": false,
     },
@@ -76,11 +86,11 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/hello/:name',
+        app.post('/render',
 
-            function HelloController_getHealth(request: any, response: any, next: any) {
+            function HelloController_render(request: any, response: any, next: any) {
             const args = {
-                    name: {"in":"query","name":"name","required":true,"dataType":"string"},
+                    json: {"in":"body","name":"json","required":true,"ref":"PostBody"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -92,7 +102,7 @@ export function RegisterRoutes(app: express.Router) {
                 const controller = new HelloController();
 
 
-              const promise = controller.getHealth.apply(controller, validatedArgs as any);
+              const promise = controller.render.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

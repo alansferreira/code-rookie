@@ -18,6 +18,36 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"PostBody": {
+				"properties": {
+					"source": {
+						"type": "string"
+					},
+					"sourceType": {
+						"type": "string",
+						"enum": [
+							"GIT",
+							"LOCAL"
+						]
+					},
+					"template": {
+						"properties": {
+							"data": {}
+						},
+						"required": [
+							"data"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"source",
+					"sourceType",
+					"template"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"User": {
 				"properties": {
 					"id": {
@@ -113,9 +143,9 @@
 				"parameters": []
 			}
 		},
-		"/hello/{name}": {
-			"get": {
-				"operationId": "GetHealth",
+		"/render": {
+			"post": {
+				"operationId": "Render",
 				"responses": {
 					"200": {
 						"description": "Success",
@@ -129,16 +159,17 @@
 					}
 				},
 				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "name",
-						"required": true,
-						"schema": {
-							"type": "string"
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PostBody"
+							}
 						}
 					}
-				]
+				}
 			}
 		},
 		"/users/{userId}": {
