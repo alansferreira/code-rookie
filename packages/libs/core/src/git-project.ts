@@ -12,13 +12,8 @@ export class GitWorkspace extends FSWorkspace {
   ) {
     super(inputFolder, outputPath, configPath)
   }
-  async clone(): Promise<void> {
+  async preRender(): Promise<void> {
     const { gitUrl, inputFolder: localPath, gitOptions } = this
     this.repository = await Clone.clone(gitUrl, localPath, gitOptions)
-  }
-  async loadConfig(): Promise<void> {
-    const { gitUrl, inputFolder: localPath, gitOptions } = this
-    this.repository = await Clone.clone(gitUrl, localPath, gitOptions)
-    await super.loadConfig()
   }
 }

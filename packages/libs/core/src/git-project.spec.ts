@@ -1,36 +1,35 @@
-import { existsSync, mkdirSync, readdirSync, rmdirSync } from 'fs'
+import { existsSync, readdirSync, rmdirSync, rmSync, statSync } from 'fs'
 import { Cred } from 'nodegit'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { GitWorkspace } from './git-project'
 
-const templatesFolder =
-  '/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/git-tests'
-const workspaceFolder = join(templatesFolder, 'ts-monorepo')
-const outputFolder = join(templatesFolder, 'ts-monorepo-generated')
-const dataFile = join(templatesFolder, 'ts-monorepo-data.json')
-const gitTemplateUrl = 'git@github.com:alellpro/typescript-monorepo.git'
+const templatesFolder = resolve(process.cwd(), '../../../templates/git-tests')
+const workspaceFolder = join(templatesFolder, 'typescript-monorepo')
+const outputFolder = join(templatesFolder, 'typescript-monorepo-generated')
+const dataFile = join(templatesFolder, 'typescript-monorepo-data.json')
+const gitTemplateUrl = 'git@github.com:alansferreira/typescript-monorepo.git'
 
 describe('Git Workspace tests', () => {
   // test('Constructor', () => {
   //   expect(wrk.name).toEqual('{{teste}}')
   //   expect(wrk.type).toEqual('FOLDER')
   // })
-  function cleanFolders() {
-    if (existsSync(outputFolder)) {
-      rmdirSync(outputFolder, { recursive: true })
-    }
-    if (existsSync(workspaceFolder)) {
-      rmdirSync(workspaceFolder, { recursive: true })
+  function cleanTemporaryResources() {
+    const entries = [workspaceFolder, outputFolder]
+    for (const entry of entries) {
+      if (!existsSync(entry)) continue
+      const stat = statSync(entry)
+      if (stat.isFile()) rmSync(entry)
+      if (stat.isDirectory()) rmdirSync(entry, { recursive: true })
     }
   }
 
   beforeAll(async () => {
-    cleanFolders()
-    mkdirSync(outputFolder, { recursive: true })
+    cleanTemporaryResources()
   })
 
   afterAll(async () => {
-    cleanFolders()
+    cleanTemporaryResources()
   })
 
   test('Cloning from ssh', async () => {
@@ -49,7 +48,7 @@ describe('Git Workspace tests', () => {
         }
       }
     )
-    await wrk.clone()
+    await wrk.preRender()
     const clonedFiles = readdirSync(wrk.outputFolder).length
     expect(clonedFiles).toBeGreaterThan(0)
   })

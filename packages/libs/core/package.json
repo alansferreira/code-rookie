@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "minimatch": "3.0.4",
-    "nodegit": "^0.27.0"
+    "nodegit": "^0.27.0",
+    "tar-stream": "^2.2.0"
   },
   "devDependencies": {
     "@types/minimatch": "3.0.5",
-    "@types/nodegit": "^0.27.6"
+    "@types/nodegit": "^0.27.6",
+    "@types/tar-stream": "^2.2.2"
   }
 }
