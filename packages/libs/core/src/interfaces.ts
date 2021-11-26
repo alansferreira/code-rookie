@@ -33,8 +33,11 @@ export interface OutputTemplateItem {
 export interface Workspace<T extends InputTemplateItem> {
   itens: T[]
   templateSpec: TemplateOptions<T, Workspace<T>>
+  preRender(): Promise<void>
   loadConfig(): Promise<void>
   loadItens(): Promise<void>
+  render(context: Context, processor: Processor): Promise<void>
+  postRender(): Promise<void>
 }
 
 export interface TemplateHooks<

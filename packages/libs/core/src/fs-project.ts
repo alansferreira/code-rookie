@@ -29,6 +29,16 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
     public outputFolder: string,
     public configPath: string = '.template'
   ) {}
+
+  async preRender(): Promise<void> {
+    await this.loadConfig()
+    await this.loadItens()
+  }
+
+  async postRender(): Promise<void> {
+    return
+  }
+
   get templateSpecPath() {
     if (existsSync(this.configPath)) return resolve(this.configPath)
     return resolve(this.inputFolder, this.configPath)
@@ -96,8 +106,7 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
   }
 
   async render(context: Context, processor: Processor) {
-    this.loadConfig()
-    this.loadItens()
+    await this.preRender()
 
     const { inputFolder, outputFolder, itens, templateSpec } = this
     const {
@@ -140,6 +149,8 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
 
     if (afterAll) await afterAll(this)
     if (postProcess) await postProcess(this)
+
+    await this.postRender()
   }
 }
 
