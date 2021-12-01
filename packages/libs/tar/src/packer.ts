@@ -13,7 +13,14 @@ export class Packer {
     headers: tar.Headers,
     buffer?: Buffer | Readable
   ): Promise<Writable> {
-    const entry = this.packer.entry(headers)
+    let { name } = headers
+    if (name.startsWith('/')) name = name.substring(1)
+    if (/\.+\//.test(name)) {
+      throw new Error(
+        `Entries names could not have relative paths like '../' or './' caused by '${name}'!`
+      )
+    }
+    const entry = this.packer.entry({ ...headers, name })
 
     if (!buffer) return entry
 

@@ -1,15 +1,6 @@
-import { PassThrough } from 'stream'
-export const merge = (...streams) => {
-  let pass = new PassThrough()
-  let waiting = streams.length
-  for (const stream of streams) {
-    pass = stream.pipe(pass, { end: false })
-    stream.on('end', () => --waiting === 0 && pass.emit('end'))
-  }
-  return pass
-}
+import { Readable } from 'stream'
 
-export async function* concatStreams(...readables) {
+export async function* concatStreams(...readables: Readable[]) {
   for (const readable of readables) {
     for await (const chunk of readable) {
       yield chunk

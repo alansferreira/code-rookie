@@ -1,5 +1,6 @@
 # compiled output
 **/__test__/output
+*.tar
 
 /dist
 /node_modules

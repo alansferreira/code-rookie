@@ -1,14 +1,29 @@
-import { createReadStream, createWriteStream, readdirSync, statSync } from 'fs'
+import {
+  createReadStream,
+  createWriteStream,
+  existsSync,
+  readdirSync,
+  rmSync,
+  statSync
+} from 'fs'
 import { join } from 'path'
-import { Readable } from 'stream'
+import { Readable, Writable } from 'stream'
 import { Packer } from './packer'
-import { concatStreams, merge } from './utils/stream'
+import { concatStreams } from './utils/stream'
 
 jest.setTimeout(60000)
 
 describe('Tarball Workspace tests', () => {
+  let outputStream: Writable
+
+  beforeEach(async () => {
+    if (existsSync('./teste.tar')) {
+      rmSync('./teste.tar', { force: true })
+    }
+    outputStream = createWriteStream('./teste.tar')
+  })
   test('Tar add single entry', async () => {
-    const packer = new Packer(createWriteStream('./teste.tar'))
+    const packer = new Packer(outputStream)
     const contentFile = join(__dirname, './index.ts')
     const contentStat = statSync(contentFile)
 
@@ -30,7 +45,7 @@ describe('Tarball Workspace tests', () => {
   })
 
   test('Tar add multiple entries', async () => {
-    const packer = new Packer(createWriteStream('./teste.tar'))
+    const packer = new Packer(outputStream)
 
     for (const file of readdirSync(__dirname)) {
       const contentFile = join(__dirname, file)
@@ -39,7 +54,7 @@ describe('Tarball Workspace tests', () => {
 
       const entry = await packer.addEntry(
         {
-          name: file,
+          name: `subpath/${file}`,
           type: 'file',
           size: contentStat.size
         },
@@ -55,8 +70,30 @@ describe('Tarball Workspace tests', () => {
     expect(stat.size).toBeGreaterThan(0)
   })
 
+  test('Tar add full dir files', async () => {
+    const packer = new Packer(outputStream)
+    const contentFile = join(__dirname, './index.ts')
+    const contentStat = statSync(contentFile)
+
+    const entry = await packer.addEntry(
+      {
+        name: 'teste.txt',
+        type: 'file',
+        size: contentStat.size
+      },
+      createReadStream(contentFile)
+    )
+
+    entry.end()
+    packer.finalize()
+
+    const stat = statSync('./teste.tar')
+
+    expect(stat.size).toBeGreaterThan(0)
+  })
+
   test('Tar add entry with sufix water mark', async () => {
-    const packer = new Packer(createWriteStream('./teste.tar'))
+    const packer = new Packer(outputStream)
     const contentFile = join(__dirname, './index.ts')
     const contentStat = statSync(contentFile)
 
