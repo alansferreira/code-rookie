@@ -2,7 +2,12 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "@code-rookie/tar/*": [
+        "../tar/src/*",
+      ]
+    },
   },
   "include": [
     "src/**/*",

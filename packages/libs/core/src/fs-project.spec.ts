@@ -78,6 +78,6 @@ describe('Workspace tests', () => {
 
     await wrk.render(templateData, new HandlebarsProcessor())
 
-    expect(readdirSync(wrk.outputFolder).length).toBeGreaterThan(0)
+    expect(readdirSync(wrk.renderFolder).length).toBeGreaterThan(0)
   })
 })

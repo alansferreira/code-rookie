@@ -5,7 +5,8 @@ export interface Processor {
   registerHelper(
     name: string,
     fn: (metadata: Metadata, ...args: Metadata[]) => Metadata
-  )
+  ): void
+
   render(
     context: Context,
     input: InputTemplateItem
@@ -30,21 +31,42 @@ export interface OutputTemplateItem {
   input?: InputTemplateItem
 }
 
-export interface Workspace<T extends InputTemplateItem> {
+export interface WorkspaceEvents<T extends InputTemplateItem> {
+  beforeAll: (workspace: Workspace<T>) => void
+  beforeEach: (input: T, workspace: Workspace<T>) => void
+  afterEach: (
+    input: T,
+    output: OutputTemplateItem,
+    workspace: Workspace<T>
+  ) => void
+  afterAll: (workspace: Workspace<T>) => void
+}
+
+export declare interface Workspace<T extends InputTemplateItem> {
   itens: T[]
   templateSpec: TemplateOptions<T, Workspace<T>>
+
   preRender(): Promise<void>
   loadConfig(): Promise<void>
   loadItens(): Promise<void>
   render(context: Context, processor: Processor): Promise<void>
   postRender(): Promise<void>
+
+  on<E extends keyof WorkspaceEvents<T>>(
+    event: E,
+    listener: WorkspaceEvents<T>[E]
+  ): this
+
+  emit<E extends keyof WorkspaceEvents<T>>(
+    event: E,
+    ...args: Parameters<WorkspaceEvents<T>[E]>
+  ): boolean
 }
 
 export interface TemplateHooks<
   T extends InputTemplateItem,
   W extends Workspace<T>
 > {
-  preProcess?: (workspace: W) => Promise<void>
   beforeAll?: (workspace: W) => Promise<void>
   beforeEach?: (input: T, workspace: W) => Promise<void>
   afterEach?: (
@@ -53,7 +75,6 @@ export interface TemplateHooks<
     workspace: W
   ) => Promise<void>
   afterAll?: (workspace: W) => Promise<void>
-  postProcess?: (workspace: W) => Promise<void>
 }
 export interface TemplateConfig {
   dataSchema?: string

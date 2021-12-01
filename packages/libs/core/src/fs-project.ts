@@ -16,19 +16,39 @@ import {
   TemplateConfig,
   TemplateHooks,
   TemplateOptions,
-  Workspace
+  Workspace,
+  WorkspaceEvents
 } from './interfaces'
 import minimatch from 'minimatch'
+import EventEmitter from 'events'
+import { warn } from 'console'
 
-export class FSWorkspace implements Workspace<FSTemplateItem> {
+export declare interface FSWorkspace {
+  on<U extends keyof WorkspaceEvents<FSTemplateItem>>(
+    event: U,
+    listener: WorkspaceEvents<FSTemplateItem>[U]
+  ): this
+
+  emit<U extends keyof WorkspaceEvents<FSTemplateItem>>(
+    event: U,
+    ...args: Parameters<WorkspaceEvents<FSTemplateItem>[U]>
+  ): boolean
+}
+
+export class FSWorkspace
+  extends EventEmitter
+  implements Workspace<FSTemplateItem>
+{
   itens: FSTemplateItem[] = []
   templateSpec: TemplateOptions<FSTemplateItem, Workspace<FSTemplateItem>>
 
   constructor(
-    public inputFolder: string,
-    public outputFolder: string,
+    public expandedFolder: string,
+    public renderFolder: string,
     public configPath: string = '.template'
-  ) {}
+  ) {
+    super({ captureRejections: true })
+  }
 
   async preRender(): Promise<void> {
     await this.loadConfig()
@@ -41,7 +61,7 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
 
   get templateSpecPath() {
     if (existsSync(this.configPath)) return resolve(this.configPath)
-    return resolve(this.inputFolder, this.configPath)
+    return resolve(this.expandedFolder, this.configPath)
   }
 
   async loadConfig(): Promise<void> {
@@ -56,21 +76,28 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
     if (existsSync(configJson)) {
       config = JSON.parse(readFileSync(configJson).toString())
     } else {
-      console.warn(`Config file '${configJson}' not founded!`)
+      warn(`Config file '${configJson}' not founded!`)
     }
 
     if (existsSync(dataSchemaJson)) {
       dataSchema = JSON.parse(readFileSync(dataSchemaJson).toString())
     } else {
-      console.warn(`Data Schema file '${dataSchemaJson}' not founded!`)
+      warn(`Data Schema file '${dataSchemaJson}' not founded!`)
     }
 
-    hooks.preProcess = require(join(templateSpecPath, 'preProcess'))
-    hooks.beforeAll = require(join(templateSpecPath, 'beforeAll'))
-    hooks.beforeEach = require(join(templateSpecPath, 'beforeEach'))
-    hooks.afterEach = require(join(templateSpecPath, 'afterEach'))
-    hooks.afterAll = require(join(templateSpecPath, 'afterAll'))
-    hooks.postProcess = require(join(templateSpecPath, 'postProcess'))
+    // Load all external hooks from '.template' folder if exists
+    const modules: Array<keyof TemplateHooks<FSTemplateItem, FSWorkspace>> = [
+      'beforeAll',
+      'beforeEach',
+      'afterEach',
+      'afterAll'
+    ]
+    for (const module of modules) {
+      const modulePath = join(templateSpecPath, module)
+      if (existsSync(modulePath + '.js')) {
+        hooks[module] = require(modulePath)
+      }
+    }
 
     this.templateSpec = {
       path: templateSpecPath,
@@ -80,7 +107,7 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
     }
   }
   async loadItens() {
-    const { inputFolder, templateSpec } = this
+    const { expandedFolder: inputFolder, templateSpec } = this
     for (const entity of readdirSync(inputFolder)) {
       const fullpath = join(inputFolder, entity)
       if (isMatchGlob(fullpath, templateSpec?.config?.ignore || [])) {
@@ -108,47 +135,49 @@ export class FSWorkspace implements Workspace<FSTemplateItem> {
   async render(context: Context, processor: Processor) {
     await this.preRender()
 
-    const { inputFolder, outputFolder, itens, templateSpec } = this
+    const { expandedFolder, renderFolder, itens, templateSpec } = this
     const {
-      preProcess,
-      beforeAll,
-      beforeEach,
-      afterEach,
-      afterAll,
-      postProcess
+      beforeAll: hookBeforeAll,
+      beforeEach: hookBeforeEach,
+      afterEach: hookAfterEach,
+      afterAll: hookAfterAll
     } = templateSpec?.hooks || {}
 
-    if (preProcess) await preProcess(this)
-    if (beforeAll) await beforeAll(this)
+    this.emit('beforeAll', this)
+    if (hookBeforeAll) await hookBeforeAll(this)
 
-    if (existsSync(outputFolder)) {
-      rmdirSync(outputFolder, { recursive: true })
+    if (existsSync(renderFolder)) {
+      rmdirSync(renderFolder, { recursive: true })
     }
-    mkdirSync(outputFolder, { recursive: true })
+    mkdirSync(renderFolder, { recursive: true })
 
     for (const fsitem of itens) {
       const { type } = fsitem
       if (type !== 'FILE') continue
 
-      if (beforeEach) await beforeEach(fsitem, this)
+      this.emit('beforeEach', fsitem, this)
+      if (hookBeforeEach) await hookBeforeEach(fsitem, this)
 
       const r = await fsitem.render(context, processor)
 
       const relativePath = (r?.name || fsitem.name).substring(
-        inputFolder.length
+        expandedFolder.length
       )
       const dirPath = relativePath.substring(
         0,
         relativePath.length - basename(relativePath).length
       )
-      mkdirSync(join(outputFolder, dirPath), { recursive: true })
-      writeFileSync(join(outputFolder, relativePath), r.output)
 
-      if (afterEach) await afterEach(fsitem, r, this)
+      r.name = join(renderFolder, relativePath)
+      mkdirSync(join(renderFolder, dirPath), { recursive: true })
+      writeFileSync(join(renderFolder, relativePath), r.output)
+
+      this.emit('afterEach', fsitem, r, this)
+      if (hookAfterEach) await hookAfterEach(fsitem, r, this)
     }
 
-    if (afterAll) await afterAll(this)
-    if (postProcess) await postProcess(this)
+    this.emit('afterAll', this)
+    if (hookAfterAll) await hookAfterAll(this)
 
     await this.postRender()
   }

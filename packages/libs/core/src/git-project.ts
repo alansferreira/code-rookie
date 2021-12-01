@@ -5,15 +5,15 @@ export class GitWorkspace extends FSWorkspace {
   public repository: Repository
   constructor(
     public gitUrl: string,
-    public inputFolder: string,
+    public expandedFolder: string,
     public outputPath: string,
     public configPath: string = '.template',
     public gitOptions?: CloneOptions
   ) {
-    super(inputFolder, outputPath, configPath)
+    super(expandedFolder, outputPath, configPath)
   }
   async preRender(): Promise<void> {
-    const { gitUrl, inputFolder: localPath, gitOptions } = this
-    this.repository = await Clone.clone(gitUrl, localPath, gitOptions)
+    const { gitUrl, expandedFolder, gitOptions } = this
+    this.repository = await Clone.clone(gitUrl, expandedFolder, gitOptions)
   }
 }
