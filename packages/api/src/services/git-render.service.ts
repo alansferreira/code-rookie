@@ -16,7 +16,7 @@ const epoch = () => Math.floor(new Date().getTime() / 1000.0)
 @Singleton
 export class GitRender {
   async getSignature(repo: Repository) {
-    let result = Signature.default(repo)
+    let result = await Signature.default(repo)
 
     if (!result) {
       result = Signature.create(
