@@ -41,6 +41,7 @@ describe('Git tests', () => {
 
     // create commit
     writeFileSync(join(repoPath, 'new-file.txt'), 'hello commit')
+
     const index = await repo.refreshIndex()
     await index.addAll()
     await index.write()
@@ -64,14 +65,19 @@ describe('Git tests', () => {
       oid,
       [parent]
     )
+    expect(newCommit).toBeDefined()
 
     // push new branch with new files
     const remotes = await repo.getRemotes()
     const origin = remotes.find((r) => r.name() === 'origin')
-    await origin.push([branch], {
-      callbacks: defaultCloneOptions.fetchOpts.callbacks
+
+    expect(origin).toBeDefined()
+    if (!origin) return
+
+    const pushId = await origin.push([branch], {
+      callbacks: defaultCloneOptions?.fetchOpts?.callbacks
     })
 
-    expect(origin).toBeTruthy()
+    expect(pushId).not.toBe(0)
   })
 })
