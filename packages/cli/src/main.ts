@@ -1,7 +1,13 @@
-import { Command } from 'commander'
+import { Command, Help } from 'commander'
 // import { version } from '../package.json'
 import { FSWorkspace } from '@code-rookie/core/fs-project'
 import { HandlebarsProcessor } from '@code-rookie/core/plugins/processors/handlebars.processor'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
+const packageJson = JSON.parse(
+  readFileSync(resolve(__dirname, '../package.json')).toString()
+)
+const { version } = packageJson
 
 interface IRenderOptions {
   input?: string
@@ -33,7 +39,6 @@ program
     'JSON data file to apply template',
     './data.json'
   )
-
   .action(renderCommand)
 
 // program
@@ -46,5 +51,11 @@ program
 //   })
 
 // console.log(process.argv)
-// program.version(version)
-program.parse(process.argv)
+
+program.version(version)
+program.exitOverride((error) => {
+  console.error(program.helpInformation())
+  process.exit(error.exitCode)
+})
+
+program.parse(process.argv, { from: 'node' })

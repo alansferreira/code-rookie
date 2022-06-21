@@ -3,9 +3,9 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { HealthController } from './../health/health.controller';
+import { HelloController } from './../controllers/render-to-git.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { HelloController } from '../controllers/render-to-git.controller';
+import { HealthController } from './../health/health.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UsersController } from './../user/user.controller';
 import * as express from 'express';
@@ -13,11 +13,12 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "HealthInfo": {
+    "GitConfig": {
         "dataType": "refObject",
         "properties": {
-            "name": {"dataType":"string"},
-            "version": {"dataType":"string"},
+            "uri": {"dataType":"string","required":true},
+            "branch": {"dataType":"string","required":true},
+            "encodedToken": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -25,9 +26,18 @@ const models: TsoaRoute.Models = {
     "PostBody": {
         "dataType": "refObject",
         "properties": {
-            "source": {"dataType":"string","required":true},
-            "sourceType": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["GIT"]},{"dataType":"enum","enums":["LOCAL"]}],"required":true},
+            "source": {"ref":"GitConfig","required":true},
+            "destination": {"ref":"GitConfig","required":true},
             "template": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"dataType":"any","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "HealthInfo": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string"},
+            "version": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -64,6 +74,30 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
+        app.post('/git/render',
+
+            function HelloController_render(request: any, response: any, next: any) {
+            const args = {
+                    json: {"in":"body","name":"json","required":true,"ref":"PostBody"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new HelloController();
+
+
+              const promise = controller.render.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/health',
 
             function HealthController_getHealth(request: any, response: any, next: any) {
@@ -80,29 +114,6 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.getHealth.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/render',
-
-            function HelloController_render(request: any, response: any, next: any) {
-            const args = {
-                    json: {"in":"body","name":"json","required":true,"ref":"PostBody"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new HelloController();
-
-
-              const promise = controller.render.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

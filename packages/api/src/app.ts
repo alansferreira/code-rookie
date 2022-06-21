@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser'
 import express from 'express'
 import { RegisterRoutes } from './.config/routes'
 import swaggerUi from 'swagger-ui-express'
+import { readFileSync } from 'fs'
 
 export const app: express.Express = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -11,7 +12,11 @@ app.use(
   '/docs',
   swaggerUi.serve,
   async (_req: express.Request, res: express.Response) => {
-    res.send(swaggerUi.generateHTML(await import('../swagger.json')))
+    res.send(
+      swaggerUi.generateHTML(
+        JSON.parse(readFileSync('../swagger.json').toString())
+      )
+    )
   }
 )
 
@@ -23,7 +28,7 @@ app.use(
     err: any,
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    _next: express.NextFunction
   ) => {
     const status = err.status || 500
     const body: any = {

@@ -1,5 +1,7 @@
+import { readFileSync } from 'fs'
 import { app } from './app'
-import * as packageJson from '../package.json'
+
+const packageJson = JSON.parse(readFileSync('../package.json').toString())
 
 const PORT_NUMBER = process.env.PORT_NUMBER || 3000
 

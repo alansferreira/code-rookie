@@ -25,7 +25,8 @@
     "commander": "^8.3.0",
     "handlebars": "4.7.7",
     "pkg": "^5.4.1",
-    "terminal-kit": "^2.1.8"
+    "terminal-kit": "^2.1.8",
+    "@code-rookie/core": "^0.0.1"
   },
   "pkg": {
     "scripts": "dist/**/*.js",

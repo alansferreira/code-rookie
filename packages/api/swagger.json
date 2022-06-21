@@ -6,29 +6,33 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"HealthInfo": {
+			"GitConfig": {
 				"properties": {
-					"name": {
+					"uri": {
 						"type": "string"
 					},
-					"version": {
+					"branch": {
+						"type": "string"
+					},
+					"encodedToken": {
 						"type": "string"
 					}
 				},
+				"required": [
+					"uri",
+					"branch",
+					"encodedToken"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"PostBody": {
 				"properties": {
 					"source": {
-						"type": "string"
+						"$ref": "#/components/schemas/GitConfig"
 					},
-					"sourceType": {
-						"type": "string",
-						"enum": [
-							"GIT",
-							"LOCAL"
-						]
+					"destination": {
+						"$ref": "#/components/schemas/GitConfig"
 					},
 					"template": {
 						"properties": {
@@ -42,9 +46,21 @@
 				},
 				"required": [
 					"source",
-					"sourceType",
+					"destination",
 					"template"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HealthInfo": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -124,26 +140,7 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/health": {
-			"get": {
-				"operationId": "GetHealth",
-				"responses": {
-					"200": {
-						"description": "Success",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HealthInfo"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/render": {
+		"/git/render": {
 			"post": {
 				"operationId": "Render",
 				"responses": {
@@ -170,6 +167,25 @@
 						}
 					}
 				}
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HealthInfo"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/users/{userId}": {

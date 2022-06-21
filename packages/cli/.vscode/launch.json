@@ -17,6 +17,19 @@
       "type": "pwa-node"
     },
     {
+      "name": "Debug [help]",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "start:dev",
+        "--help"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
       "type": "node",
       "name": "vscode-jest-tests",
       "request": "launch",

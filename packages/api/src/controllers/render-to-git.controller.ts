@@ -54,7 +54,7 @@ export class HelloController extends Controller {
       },
       new HandlebarsProcessor()
     )
-
+    return 'no-ok'
     // TODO: add git destinations here!!
   }
 }
