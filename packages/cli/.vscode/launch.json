@@ -7,9 +7,24 @@
       "runtimeArgs": [
         "start:dev",
         "render", 
-        "-i", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo", 
-        "-o", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-generated",
-        "-d", "/media/alf/usr-data/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-data.json"
+        "-i", "/media/alf/shared-ext3/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo", 
+        "-o", "/media/alf/shared-ext3/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-generated",
+        "-d", "/media/alf/shared-ext3/dev/repo/github.com/alansferreira/stages/code-rookie/templates/ts-monorepo-data.json"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    },
+    {
+      "name": "Debug [render help]",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "start:dev",
+        // "help",
+        // "render" 
+        "render", "--help"
       ],
       "skipFiles": [
         "<node_internals>/**"

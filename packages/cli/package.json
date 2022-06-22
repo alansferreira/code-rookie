@@ -29,6 +29,7 @@
     "@code-rookie/core": "^0.0.1"
   },
   "pkg": {
+    "assemblyName": "rookie",
     "scripts": "dist/**/*.js",
     "targets": [ 
       "node10-linuxstatic-x64",
