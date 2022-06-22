@@ -20,3 +20,5 @@ After several fractions of project templates that don't offer extensibility beyo
 
 See `spec.ts` and `.vscode/launch.json` files to run/debug and examples of use.
 
+## Throubles
+Maybe you have install `Kerberos` nested by `node-git`, you can see how to install [here](https://command-not-found.com/krb5-config).
