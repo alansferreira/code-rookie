@@ -2,10 +2,7 @@ export type Metadata = any
 
 export interface Processor {
   name: string
-  registerHelper(
-    name: string,
-    fn: (metadata: Metadata, ...args: Metadata[]) => Metadata
-  ): void
+  registerHelper(name: string, fn: (...args: Metadata[]) => Metadata): void
 
   render(
     context: Context,
