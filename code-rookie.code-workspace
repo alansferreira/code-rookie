@@ -1,33 +1,37 @@
 {
 	"folders": [
-		{
-			"name": "🏠 code-rookie",
-			"path": "."
-		},
-		{
-			"name": "🚀 @code-rookie/api",
-			"path": "packages/api"
-		},
-		{
-			"name": "🚀 @code-rookie/cli",
-			"path": "packages/cli"
-		},
-		{
-			"name": "📦 @code-rookie/core",
-			"path": "packages/libs/core"
-		},
-		{
-			"name": "📦 @code-rookie/git",
-			"path": "packages/libs/git"
-		},
-		{
-			"name": "📦 @code-rookie/tar",
-			"path": "packages/libs/tar"
-		},
-		{
-			"name": "🚀 @code-rookie/web",
-			"path": "packages/web"
-		}
-	],
+    {
+      "name": "🏠 code-rookie",
+      "path": "."
+    },
+    {
+      "name": "🚀 @code-rookie/api",
+      "path": "packages/api"
+    },
+    {
+      "name": "🚀 @code-rookie/cli",
+      "path": "packages/cli"
+    },
+    {
+      "name": "📦 @code-rookie/core",
+      "path": "packages/libs/core"
+    },
+    {
+      "name": "📦 @code-rookie/git",
+      "path": "packages/libs/git"
+    },
+    {
+      "name": "📦 @code-rookie/tar",
+      "path": "packages/libs/tar"
+    },
+    {
+      "name": "📦 @code-rookie/logger",
+      "path": "packages/logger"
+    },
+    {
+      "name": "🚀 @code-rookie/web",
+      "path": "packages/web"
+    }
+  ],
   "settings": {}
 }

@@ -4,6 +4,7 @@ import { FSWorkspace } from '@code-rookie/core/fs-project'
 import { HandlebarsProcessor } from '@code-rookie/core/plugins/processors/handlebars.processor'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
+import { build } from './commands/render.command'
 const packageJson = JSON.parse(
   readFileSync(resolve(__dirname, '../package.json')).toString()
 )
@@ -12,21 +13,6 @@ const {
   pkg: { assemblyName }
 } = packageJson
 
-interface IRenderOptions {
-  input?: string
-  output?: string
-  processor?: string
-  dataFile?: string
-}
-
-const renderCommand = (options: IRenderOptions) => {
-  const { input, output, dataFile } = options
-
-  const wrk = new FSWorkspace(input, output)
-
-  wrk.render({ data: dataFile }, new HandlebarsProcessor())
-  // console.log(options)
-}
 const program = new Command()
 program.version(version)
 program.name(assemblyName)
@@ -50,10 +36,26 @@ function commandExitOverride(commandName: string) {
   }
 }
 
+build(program).exitOverride(commandExitOverride('render'))
+
 program
   .command('render')
   .exitOverride(commandExitOverride('render'))
-  .option('-i, --input <input>', 'Input template folder', './template')
+  .option(
+    '-d, --directory <directory>',
+    'Input template folder from local',
+    './template'
+  )
+  .option(
+    '-t, --tar <tarball>',
+    'Input template folder from tarball(.tar) file'
+  )
+  .option('-g, --git <git>', 'Input template folder from git')
+  .option(
+    '-m, --m <manifest>',
+    'Manisfest file in relative path from input type',
+    'template.yaml'
+  )
   .option('-o, --output <output>', 'Output processed folder', './output')
   .option(
     '-p, --processor <processorName>',
