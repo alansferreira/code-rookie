@@ -49,7 +49,7 @@ describe('Git Workspace tests', () => {
       }
     )
     await wrk.preRender()
-    const clonedFiles = readdirSync(wrk.outputFolder).length
+    const clonedFiles = readdirSync(wrk.expandedFolder).length
     expect(clonedFiles).toBeGreaterThan(0)
   })
 
